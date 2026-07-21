@@ -107,7 +107,7 @@ python src/main.py
 ┃ ┗  gui.py              # CustomTkinter industrial dashboard
 ┣  calibration/                  
 ┃ ┣  calibrate_z.py             # Calibration of the pick height for the xArm
-┃ ┣  generatematrix.py           # Matrix generator for translation of XY pixels to XY coordinates
+┃ ┣  generatematrix.py           # Matrix generator for translation of X/Y pixels to X/Y coordinates
 ┃  requirements.txt
 ┗  README.md             
 ```
