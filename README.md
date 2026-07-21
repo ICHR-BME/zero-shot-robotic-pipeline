@@ -104,7 +104,8 @@ python src/main.py
 ┃ ┣  database.py         # ProductionDB class (SQLite)
 ┃ ┣  robots.py           # RobotMain and RobotSorter classes (xArm SDK)
 ┃ ┣  vision.py           # SAM, DINOv2, FAISS initialization
-┃ ┗  gui.py              # CustomTkinter industrial dashboard 
+┃ ┗  gui.py              # CustomTkinter industrial dashboard
+┃  requirements.txt
 ┗  README.md             
 ```
 
