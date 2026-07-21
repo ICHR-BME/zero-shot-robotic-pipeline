@@ -104,18 +104,13 @@ python src/main.py
 ##  Project Structure
 
 ```text
- vision-sorting-pipeline
 ┣  src/                  
 ┃ ┣  main.py             # Entry point & thread management
 ┃ ┣  config.py           # Global constants (IPs, coordinates, UI colors)
 ┃ ┣  database.py         # ProductionDB class (SQLite)
 ┃ ┣  robots.py           # RobotMain and RobotSorter classes (xArm SDK)
 ┃ ┣  vision.py           # SAM, DINOv2, FAISS initialization
-┃ ┗  gui.py              # CustomTkinter industrial dashboard
-┣  models/               # Model weights (.pth) (Ignored in Git)
-┣  docs/                 # Calibration files (.npy) and diagrams
-┣  .gitignore            
-┣  requirements.txt      
+┃ ┗  gui.py              # CustomTkinter industrial dashboard 
 ┗  README.md             
 ```
 
