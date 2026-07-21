@@ -9,12 +9,6 @@ This project consists in a modular, automated flexible manufacturing pipeline th
 
 ---
 
-##  System Demonstration
-
-*(Add a GIF here showing the CustomTkinter GUI in action, Grounded-SAM segmenting a part, and the dual xArms executing the pick-and-place sequence)*
-
----
-
 ##  System Architecture
 
 The pipeline seamlessly integrates computer vision, deep learning feature extraction, and distributed robotic control.
@@ -118,4 +112,4 @@ python src/main.py
 
 ##  References & Academic Context
 
-This system was conceptualized and developed as part of a modular, automated flexible manufacturing line concept for the **2026 Learning Factory Conference**. The project paper details the zero-shot vision integration, coordinate matrix calibration troubleshooting, and the automated sorting pipeline architecture.
+This system was conceptualized and developed as part of a modular, automated flexible manufacturing line concept for Expoingenierías 2026. The project paper details the zero-shot vision integration, coordinate matrix calibration troubleshooting, and the automated sorting pipeline architecture.
