@@ -59,7 +59,7 @@ graph TD
 
 ---
 
-## 🛠️ Key Features
+##  Key Features
 
 *   **Zero-Shot Registration:** Register new parts in seconds using the CustomTkinter dashboard. No dataset collection or neural network retraining required.
 *   **Traceability:** Every pick-and-place event is logged into a local SQLite database (`production_log.db`), tracking timestamps, part names, quality status, feature distances, and physical spatial coordinates.
