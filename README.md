@@ -105,6 +105,9 @@ python src/main.py
 ┃ ┣  robots.py           # RobotMain and RobotSorter classes (xArm SDK)
 ┃ ┣  vision.py           # SAM, DINOv2, FAISS initialization
 ┃ ┗  gui.py              # CustomTkinter industrial dashboard
+┣  calibration/                  
+┃ ┣  calibrate_z.py             # Calibration of the pick height for the xArm
+┃ ┣  generatematrix.py           # Matrix generator for translation of XY pixels to XY coordinates
 ┃  requirements.txt
 ┗  README.md             
 ```
