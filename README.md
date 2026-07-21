@@ -5,7 +5,7 @@
 ![OpenCV](https://img.shields.io/badge/OpenCV-Vision-5C3EE8?logo=opencv&logoColor=white)
 ![SQLite](https://img.shields.io/badge/SQLite-Database-003B57?logo=sqlite&logoColor=white)
 
-**FrED** is a modular, automated flexible manufacturing pipeline that leverages zero-shot visual inspection for real-time quality control, sorting, and traceability. Developed for the Learning Factory Conference 2026, this system controls a dual-robot setup without the need for traditional model retraining.
+This project consists in a modular, automated flexible manufacturing pipeline that leverages zero-shot visual inspection for real-time quality control, sorting, and traceability. Developed for Expoingenierías 2026, this system controls a dual-robot setup without the need for traditional model retraining.
 
 ---
 
