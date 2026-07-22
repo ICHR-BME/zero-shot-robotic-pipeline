@@ -11,8 +11,7 @@ from config import (
     BOX_THRESHOLD,
     DINO_DIM,
     DINO_MODEL_NAME,
-    GROUNDING_DINO_CHECKPOINT,
-    GROUNDING_DINO_CONFIG,
+    GROUNDING_DINO_MODEL_NAME,
     ROI_SIZE,
     SAM_CHECKPOINT,
     SHOW_SIDE_DEBUG,
@@ -26,9 +25,13 @@ import faiss
 import numpy as np
 import torch
 from PIL import Image
-from groundingdino.util.inference import Model as DINOModel
 from segment_anything import SamPredictor, sam_model_registry
-from transformers import AutoImageProcessor, AutoModel
+from transformers import (
+    AutoImageProcessor,
+    AutoModel,
+    AutoModelForZeroShotObjectDetection,
+    AutoProcessor,
+)
 
 log = logging.getLogger(__name__)
 
@@ -41,6 +44,7 @@ class VisionSystem:
 
         self.dino_processor = None
         self.dino_model = None
+        self.grounding_processor = None
         self.grounding_dino = None
         self.sam_predictor = None
         self._models_loaded = False
@@ -85,15 +89,20 @@ class VisionSystem:
         log.info("Loading DINOv2…")
         self.dino_processor = AutoImageProcessor.from_pretrained(DINO_MODEL_NAME)
         self.dino_model = AutoModel.from_pretrained(DINO_MODEL_NAME)
+        self.dino_model.to(self.device)
         self.dino_model.eval()
 
-        log.info("Loading Grounded-SAM…")
+        log.info("Loading Grounding DINO from Hugging Face…")
         log.info("Using device: %s", self.device)
-        self.grounding_dino = DINOModel(
-            model_config_path=GROUNDING_DINO_CONFIG,
-            model_checkpoint_path=GROUNDING_DINO_CHECKPOINT,
-            device=self.device,
+        self.grounding_processor = AutoProcessor.from_pretrained(
+            GROUNDING_DINO_MODEL_NAME
         )
+        self.grounding_dino = (
+            AutoModelForZeroShotObjectDetection
+            .from_pretrained(GROUNDING_DINO_MODEL_NAME)
+            .to(self.device)
+        )
+        self.grounding_dino.eval()
 
         sam_model = sam_model_registry["vit_b"](checkpoint=SAM_CHECKPOINT)
         sam_model.to(device=self.device)
@@ -165,7 +174,10 @@ class VisionSystem:
 
         image_rgb = cv2.cvtColor(image_bgr, cv2.COLOR_BGR2RGB)
         image_pil = Image.fromarray(image_rgb)
-        inputs = self.dino_processor(images=image_pil, return_tensors="pt")
+        inputs = self.dino_processor(
+            images=image_pil,
+            return_tensors="pt",
+        ).to(self.device)
 
         with self._model_lock:
             with torch.no_grad():
@@ -187,18 +199,40 @@ class VisionSystem:
         if not self._models_loaded:
             raise RuntimeError("Vision models are not loaded.")
 
+        image_pil = Image.fromarray(image_rgb)
+
         with self._model_lock:
-            detections, _ = self.grounding_dino.predict_with_caption(
-                image=image_rgb,
-                caption=text_prompt,
-                box_threshold=BOX_THRESHOLD,
+            inputs = self.grounding_processor(
+                images=image_pil,
+                text=[text_prompt],
+                return_tensors="pt",
+            ).to(self.device)
+
+            with torch.no_grad():
+                outputs = self.grounding_dino(**inputs)
+
+            result = self.grounding_processor.post_process_grounded_object_detection(
+                outputs,
+                input_ids=inputs.input_ids,
+                threshold=BOX_THRESHOLD,
                 text_threshold=TEXT_THRESHOLD,
-            )
-            if len(detections.xyxy) == 0:
+                target_sizes=[image_rgb.shape[:2]],
+            )[0]
+
+            boxes = result["boxes"]
+            scores = result["scores"]
+            if len(boxes) == 0:
                 return None
 
-            best_idx = int(np.argmax(detections.confidence))
-            sam_box = detections.xyxy[best_idx]
+            best_idx = int(torch.argmax(scores).item())
+            sam_box = (
+                boxes[best_idx]
+                .detach()
+                .cpu()
+                .numpy()
+                .astype(np.float32)
+            )
+
             self.sam_predictor.set_image(image_rgb)
             masks, _, _ = self.sam_predictor.predict(
                 box=sam_box,

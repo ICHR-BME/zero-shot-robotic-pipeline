@@ -22,8 +22,7 @@ ROBOT2_IP = "192.168.0.181"
 CALIB_MATRIX_FILE = "matriz_vision_xarm.npy"
 DB_FILE = "production_log.db"
 
-GROUNDING_DINO_CONFIG = "models/GroundingDINO_SwinT_OGC.py"
-GROUNDING_DINO_CHECKPOINT = "models/groundingdino_swint_ogc.pth"
+GROUNDING_DINO_MODEL_NAME = "IDEA-Research/grounding-dino-tiny"
 SAM_CHECKPOINT = "models/sam_vit_b_01ec64.pth"
 DINO_MODEL_NAME = "facebook/dinov2-small"
 

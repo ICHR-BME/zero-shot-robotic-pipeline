@@ -3,3 +3,7 @@ __pycache__/
 .pytest_cache/
 .venv/
 venv/
+
+# Model weights are downloaded locally and must not be committed.
+models/*.pth
+models/*.pt

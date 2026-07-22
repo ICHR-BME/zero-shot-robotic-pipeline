@@ -12,13 +12,17 @@ customtkinter>=5.2.0
 # Hardware / Robotic Control
 xarm-python-sdk>=1.13.0
 
-# Machine Learning & AI 
-# (Configured for CUDA acceleration on RTX series GPUs)
+# Machine Learning & AI
+# Install the desired CUDA build of torch/torchvision before this file.
 torch>=2.0.0
 torchvision>=0.15.0
-transformers>=4.30.0
-faiss-gpu>=1.7.4
+transformers>=4.40.0
 
-# Vision Models (Installed directly from source)
+# The reference catalogue is small; CPU FAISS avoids unsupported Windows GPU wheels.
+faiss-cpu>=1.8.0
+
+# SAM is still installed from the official source repository.
 git+https://github.com/facebookresearch/segment-anything.git
-git+https://github.com/IDEA-Research/GroundingDINO.git
+
+# Grounding DINO is loaded through Transformers as
+# IDEA-Research/grounding-dino-tiny. No local C++/CUDA extension build is needed.
